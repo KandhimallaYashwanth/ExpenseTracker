@@ -147,7 +147,7 @@ The app is publicly accessible via both **domain and subdomain**, with secure **
 ---
 
 ### 👨‍💻 Developed & Deployed by:
-**Yashwanth Reddy Kandhimalla**  
+**Kandhimalla Yashwanth**  
 *DevOps Internship Project – November 2025*
 
 ---
