@@ -10,31 +10,51 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+    
       - name: Install dependencies
         run: npm ci
 
+  
       - name: Build Vite app
         run: npm run build
 
+    
       - name: Upload dist files to VPS
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.DEPLOY_KEY }}
+          key: |
+            ${{ secrets.DEPLOY_KEY }}
+          port: 22
           source: "dist/*"
           target: "/var/www/reactapp/releases/${{ github.run_number }}/"
+          use_insecure_cipher: true
+          debug: true
 
+     
       - name: Update live site (zero downtime)
         uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.DEPLOY_KEY }}
+          key: |
+            ${{ secrets.DEPLOY_KEY }}
+          port: 22
+          use_insecure_cipher: true
+          debug: true
           script: |
+            echo "🚀 Deploying new version..."
             rm -rf /var/www/reactapp/current
             ln -s /var/www/reactapp/releases/${{ github.run_number }} /var/www/reactapp/current
             sudo systemctl restart nginx
+            echo "✅ Deployment complete!"
