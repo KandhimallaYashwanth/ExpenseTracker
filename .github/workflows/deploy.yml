@@ -1,9 +1,9 @@
-name: Deploy React App to VPS
+name: Deploy Vite React App to VPS
 
 on:
   push:
     branches:
-      - main  
+      - main 
 
 jobs:
   build-and-deploy:
@@ -16,16 +16,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build React app
+      - name: Build Vite app
         run: npm run build
 
-      - name: Upload build files to VPS
+      - name: Upload dist files to VPS
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
-          source: "build/*"
+          source: "dist/*"
           target: "/var/www/reactapp/releases/${{ github.run_number }}/"
 
       - name: Update live site (zero downtime)
