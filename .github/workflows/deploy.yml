@@ -1,6 +1,5 @@
 name: Deploy Vite React App to VPS
 
-
 on:
   push:
     branches:
@@ -11,52 +10,59 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-     
-      - name: Checkout code
+      - name: 🧩 Checkout code
         uses: actions/checkout@v3
 
-     
-      - name: Setup Node.js
+      - name: 🧰 Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
-   
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: npm ci
 
-      - name: Build Vite app
+      - name: 🏗️ Build Vite app
         run: npm run build
 
-    
-      - name: Upload build files to VPS
+      - name: 📤 Upload build files to VPS
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          key: |
-            ${{ secrets.DEPLOY_KEY }}
+          key: ${{ secrets.DEPLOY_KEY }}
           port: 22
           source: "dist/*"
           target: "/var/www/reactapp/releases/${{ github.run_number }}/"
+          overwrite: true
+          rm: false
+          strip_components: 0
           use_insecure_cipher: true
           debug: true
 
- 
-      - name: Run remote commands on VPS
-        uses: appleboy/ssh-action@master  
+      - name: 🚀 Run remote deployment commands
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          key: |
-            ${{ secrets.DEPLOY_KEY }}
+          key: ${{ secrets.DEPLOY_KEY }}
           port: 22
           use_insecure_cipher: true
           script_stop: true
           debug: true
           script: |
-            echo "🚀 Deploying new version..."
-            rm -rf /var/www/reactapp/current
-            ln -s /var/www/reactapp/releases/${{ github.run_number }} /var/www/reactapp/current
-            sudo systemctl restart nginx
-            echo "✅ Deployment complete!"
+            echo "🔁 Starting zero-downtime deployment..."
+
+            # Ensure directories exist
+            mkdir -p /var/www/reactapp/releases
+            mkdir -p /var/www/reactapp/current
+
+            # Update symlink atomically
+            ln -sfn /var/www/reactapp/releases/${{ github.run_number }} /var/www/reactapp/current
+
+            # Fix permissions
+            sudo chown -R www-data:www-data /var/www/reactapp
+
+            # Restart Nginx
+            sudo systemctl reload nginx
+
+            echo "✅ Deployment successful and live!"
