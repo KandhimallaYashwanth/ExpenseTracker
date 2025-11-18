@@ -1,6 +1,6 @@
-# 🚀 ExpenseTracker – DevOps Internship Deployment Project
+# 🚀 ExpenseTracker – DevOps Deployment Project
 
-This project was completed as part of a **DevOps Internship Task**.  
+ 
 It demonstrates the full deployment workflow for a **React application** on a **Linux VPS**,  
 featuring **CI/CD automation, domain management, HTTPS security, and zero-downtime releases**.
 
@@ -103,22 +103,6 @@ Certbot automatically:
 - Configures Nginx for HTTPS and HTTP → HTTPS redirection  
 - Sets up auto-renewal via cron/systemd (renewal every 60–90 days)
 
----
-
-## 🧾 Task Completion Checklist
-
-| # | Requirement | Status | Details |
-|---|--------------|:------:|---------|
-| 1 | Deploy any React app | ✅ | ExpenseTracker deployed successfully |
-| 2 | Use GitHub Actions or equivalent CI/CD | ✅ | GitHub Actions automates build and deploy |
-| 3 | Deploy on Linux VPS | ✅ | GCP Ubuntu 22.04 |
-| 4 | Application publicly accessible | ✅ | Domain, subdomain, and IP |
-| 5 | Add Domain/Subdomain | ✅ | FreeDNS (afraid.org) |
-| 6 | Zero Downtime Deployment | ✅ | Versioned release + symlink switch |
-| 7 | Enable HTTPS | ✅ | Certbot with auto-renewal |
-| 8 | IP Fallback | ✅ | [http://34.93.136.44](http://34.93.136.44) (non-SSL fallback) |
-
----
 
 ## 📚 Verification Commands
 
@@ -148,6 +132,6 @@ The app is publicly accessible via both **domain and subdomain**, with secure **
 
 ### 👨‍💻 Developed & Deployed by:
 **Kandhimalla Yashwanth**  
-*DevOps Internship Project – November 2025*
+*DevOps Project *
 
 ---
